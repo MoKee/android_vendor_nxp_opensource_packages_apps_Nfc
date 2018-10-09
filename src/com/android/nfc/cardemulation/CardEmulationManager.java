@@ -31,9 +31,9 @@ import android.content.Intent;
 import android.nfc.INfcCardEmulation;
 import android.nfc.INfcFCardEmulation;
 import android.nfc.cardemulation.AidGroup;
-import android.nfc.cardemulation.NQAidGroup;
+import android.nfc.cardemulation.NfcAidGroup;
 import android.nfc.cardemulation.ApduServiceInfo;
-import android.nfc.cardemulation.NQApduServiceInfo;
+import android.nfc.cardemulation.NfcApduServiceInfo;
 import android.nfc.cardemulation.NfcFServiceInfo;
 import android.nfc.cardemulation.CardEmulation;
 import android.nfc.cardemulation.NfcFCardEmulation;
@@ -49,7 +49,7 @@ import com.android.nfc.NfcPermissions;
 import com.android.nfc.NfcService;
 import com.android.nfc.cardemulation.RegisteredServicesCache;
 import com.android.nfc.cardemulation.RegisteredNfcFServicesCache;
-import com.gsma.nfc.internal.RegisteredNxpServicesCache;
+import com.gsma.nfc.internal.RegisteredNfcServicesCache;
 
 /**
  * CardEmulationManager is the central entity
@@ -87,7 +87,7 @@ public class CardEmulationManager implements RegisteredServicesCache.Callback,
     final CardEmulationInterface mCardEmulationInterface;
     final NfcFCardEmulationInterface mNfcFCardEmulationInterface;
     final PowerManager mPowerManager;
-    final RegisteredNxpServicesCache mRegisteredNxpServicesCache;
+    final RegisteredNfcServicesCache mRegisteredNfcServicesCache;
 
     public CardEmulationManager(Context context) {
         mContext = context;
@@ -102,8 +102,8 @@ public class CardEmulationManager implements RegisteredServicesCache.Callback,
         mPreferredServices = new PreferredServices(context, mServiceCache, mAidCache, this);
         mEnabledNfcFServices = new EnabledNfcFServices(
                 context, mNfcFServicesCache, mT3tIdentifiersCache, this);
-        mRegisteredNxpServicesCache = new RegisteredNxpServicesCache(context, mServiceCache);
-        mServiceCache.initialize(mRegisteredNxpServicesCache);
+        mRegisteredNfcServicesCache = new RegisteredNfcServicesCache(context, mServiceCache);
+        mServiceCache.initialize(mRegisteredNfcServicesCache);
         mNfcFServicesCache.initialize();
         mPowerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
     }
@@ -120,8 +120,8 @@ public class CardEmulationManager implements RegisteredServicesCache.Callback,
         return mAidCache;
     }
 
-    public RegisteredNxpServicesCache getRegisteredNxpServicesCache() {
-        return mRegisteredNxpServicesCache;
+    public RegisteredNfcServicesCache getRegisteredNfcServicesCache() {
+        return mRegisteredNfcServicesCache;
     }
 
     public void onHostCardEmulationActivated(int technology) {
@@ -205,7 +205,7 @@ public class CardEmulationManager implements RegisteredServicesCache.Callback,
     }
 
     @Override
-    public void onServicesUpdated(int userId, List<NQApduServiceInfo> services) {
+    public void onServicesUpdated(int userId, List<NfcApduServiceInfo> services) {
         // Verify defaults are still sane
         verifyDefaults(userId, services);
         // Update the AID cache
@@ -222,7 +222,7 @@ public class CardEmulationManager implements RegisteredServicesCache.Callback,
         mEnabledNfcFServices.onServicesUpdated();
     }
 
-    void verifyDefaults(int userId, List<NQApduServiceInfo> services) {
+    void verifyDefaults(int userId, List<NfcApduServiceInfo> services) {
         ComponentName defaultPaymentService =
                 getDefaultServiceForCategory(userId, CardEmulation.CATEGORY_PAYMENT, false);
         if (DBG) Log.d(TAG, "Current default: " + defaultPaymentService);
@@ -231,7 +231,7 @@ public class CardEmulationManager implements RegisteredServicesCache.Callback,
             // in that case, automatically set that app as default.
             int numPaymentServices = 0;
             ComponentName lastFoundPaymentService = null;
-            for (NQApduServiceInfo service : services) {
+            for (NfcApduServiceInfo service : services) {
                 if (service.hasCategory(CardEmulation.CATEGORY_PAYMENT))  {
                     numPaymentServices++;
                     lastFoundPaymentService = service.getComponent();
@@ -390,7 +390,7 @@ public class CardEmulationManager implements RegisteredServicesCache.Callback,
                 return false;
             }
             return mServiceCache.registerAidGroupForService(userId, Binder.getCallingUid(), service,
-                    new NQAidGroup(aidGroup));
+                    new NfcAidGroup(aidGroup));
         }
 
         @Override
@@ -422,10 +422,10 @@ public class CardEmulationManager implements RegisteredServicesCache.Callback,
                 throws RemoteException {
             NfcPermissions.validateUserId(userId);
             NfcPermissions.enforceAdminPermissions(mContext);
-            List<NQApduServiceInfo> nqApduServices = mServiceCache.getServicesForCategory(userId, category);
+            List<NfcApduServiceInfo> nfcApduServices = mServiceCache.getServicesForCategory(userId, category);
             ArrayList<ApduServiceInfo> apduServices = new ArrayList<ApduServiceInfo>();
-            for(NQApduServiceInfo nqApdu : nqApduServices) {
-                ApduServiceInfo apduService = nqApdu.createApduServiceInfo();
+            for(NfcApduServiceInfo nfcApdu : nfcApduServices) {
+                ApduServiceInfo apduService = nfcApdu.createApduServiceInfo();
                 apduServices.add(apduService);
             }
             if(DBG) Log.d(TAG, "getServices() size: " + apduServices.size());
@@ -574,7 +574,7 @@ public class CardEmulationManager implements RegisteredServicesCache.Callback,
         mT3tIdentifiersCache.onEnabledForegroundNfcFServiceChanged(service);
         mHostNfcFEmulationManager.onEnabledForegroundNfcFServiceChanged(service);
     }
-     public List<NQApduServiceInfo> getAllServices() {
+     public List<NfcApduServiceInfo> getAllServices() {
         int userId = ActivityManager.getCurrentUser();
         return mServiceCache.getServices(userId);
     }
