@@ -117,6 +117,7 @@ typedef enum
   TARGET_SDM630                        = 318, /**< SDM630 target */
   TARGET_SDM845                        = 321, /**< SDM845 target */
   TARGET_SM8150                        = 339, /**< SM8150 target */
+  TARGET_SM6125                        = 394, /**< SM6125 target */
   TARGET_DEFAULT                       = TARGET_GENERIC, /**< new targets */
   TARGET_INVALID                       = 0xFF
 } TARGETTYPE;
@@ -343,6 +344,7 @@ int CNxpNfcConfig::getconfiguration_id(char *config_file)
         case TARGET_SM8150:
         case TARGET_SM6150:
         case TARGET_SM7150:
+        case TARGET_SM6125:
             config_id = QRD_TYPE_SN100;
             strlcpy(config_file, config_name_qrd_SN100, MAX_DATA_CONFIG_PATH_LEN);
             break;
@@ -399,6 +401,7 @@ int CNxpNfcConfig::getconfiguration_id(char *config_file)
         case TARGET_SM8150:
         case TARGET_SM6150:
         case TARGET_SM7150:
+        case TARGET_SM6125:
             config_id = MTP_TYPE_SN100;
             strlcpy(config_file, config_name_mtp_SN100, MAX_DATA_CONFIG_PATH_LEN);
             break;
@@ -633,6 +636,7 @@ bool CNxpNfcConfig::readConfig(const char* name, bool bResetContent) {
           break;
         }
       // fall through to numValue to handle numValue
+      [[fallthrough]];
 
       case NUM_VALUE:
         if (isDigit(c, base)) {
