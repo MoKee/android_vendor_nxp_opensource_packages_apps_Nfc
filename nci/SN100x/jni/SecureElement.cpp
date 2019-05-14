@@ -3,7 +3,7 @@
  *  Copyright (c) 2016, The Linux Foundation. All rights reserved.
  *  Not a Contribution.
  *
- *  Copyright (C) 2018 NXP Semiconductors
+ *  Copyright (C) 2018-2019 NXP Semiconductors
  *  The original Work has been changed by NXP Semiconductors.
  *
  *  Copyright (C) 2012 The Android Open Source Project
@@ -21,7 +21,6 @@
  *  limitations under the License.
  *
  ******************************************************************************/
-
 
 #include "SecureElement.h"
 #include <nativehelper/ScopedLocalRef.h>
@@ -61,6 +60,7 @@ uint8_t  SecureElement::mStaticPipeProp;
 *******************************************************************************/
 SecureElement::SecureElement() :
     mNewPipeId (0),
+    mIsSeIntfActivated(false),
     mNativeData(NULL),
     mbNewEE (true),
     mIsInit (false),
@@ -109,6 +109,7 @@ bool SecureElement::initialize(nfc_jni_native_data* native) {
     mActualNumEe    = nfcFL.nfccFL._NFA_EE_MAX_EE_SUPPORTED;
     mbNewEE         = true;
     mNewPipeId      = 0;
+    mIsSeIntfActivated = false;
     mNewSourceGate  = 0;
     unsigned long val = 0;
     memset (mEeInfo, 0, sizeof(mEeInfo));

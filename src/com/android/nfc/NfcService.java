@@ -2,7 +2,7 @@
  * Copyright (c) 2015-2016, The Linux Foundation. All rights reserved.
  * Not a Contribution.
  *
- * Copyright (C) 2018 NXP Semiconductors
+ * Copyright (C) 2018-2019 NXP Semiconductors
  * The original Work has been changed by NXP Semiconductors.
  * Copyright (C) 2010 The Android Open Source Project
  *
@@ -157,6 +157,7 @@ public class NfcService implements DeviceHostListener {
     static final String TRON_NFC_CE = "nfc_ce";
     static final String TRON_NFC_P2P = "nfc_p2p";
     static final String TRON_NFC_TAG = "nfc_tag";
+    static final String SEMS_OUTPUT_RESP = "/data/nfc/sems.txt";
     static final int TECH_TYPE_A= 0x01;
     static final int MSG_NDEF_TAG = 0;
     private boolean ETSI_STOP_CONFIG = false;
@@ -1668,6 +1669,59 @@ public class NfcService implements DeviceHostListener {
           return mDeviceHost.transceiveAppData(data);
         }
         @Override
+        public boolean semsGetExecutionStatus() {
+          Log.e(TAG, "Get SEMS execution status" );
+          if (!isNfcEnabled()) {
+              Log.e(TAG, "NFCC not enabled.." );
+              return false;
+          }
+          if(mDeviceHost.isNfccBusy())
+          {
+            Log.e(TAG, "NFCC is busy.." );
+            return false;
+          }
+          return mDeviceHost.semsGetExecutionStatus();
+        }
+        @Override
+        public String semsGetOutputData() {
+          Log.e(TAG, "Get SEMS response output file" );
+          if (!isNfcEnabled()) {
+              Log.e(TAG, "NFCC not enabled.." );
+              return null;
+          }
+          if(mDeviceHost.isNfccBusy())
+          {
+            Log.e(TAG, "NFCC is busy.." );
+            return null;
+          }
+          mDeviceHost.semsGetOutputData();
+          File f = new File(SEMS_OUTPUT_RESP);
+
+          /*If the file does not exists*/
+          if(!(f.isFile()))
+          {
+              Log.i(TAG, "FileNotFound ls backup");
+              return null;
+          }
+          try {
+            BufferedReader reader = new BufferedReader(new FileReader(SEMS_OUTPUT_RESP));
+            StringBuilder stringBuilder = new StringBuilder();
+            String line = null;
+            String ls = System.getProperty("line.separator");
+            while ((line = reader.readLine()) != null) {
+              stringBuilder.append(line);
+              stringBuilder.append(ls);
+            }
+            reader.close();
+
+            String content = stringBuilder.toString();
+            return content;
+          } catch(IOException e) {
+             Log.i(TAG, "Exception while reading sems output response in nfc");
+          }
+          return null;
+        }
+        @Override
         public int setConfig(String configs , String pkg) {
             Log.e(TAG, "Setting configs for Transit" );
             /*Check permissions*/
@@ -1781,6 +1835,27 @@ public class NfcService implements DeviceHostListener {
                 throw new RemoteException("NFC is not enabled");
             }
             return mDeviceHost.doGetSelectedUicc();
+        }
+        /*
+        * Activate the SecureElement Interface
+        * @return: success/failure
+        */
+        @Override
+        public int activateSeInterface(){
+            synchronized (NfcService.this) {
+                return mSecureElement.activateSeInterface();
+            }
+        }
+
+        /*
+        * Deactivate the SecureElement Interface
+        * @return: success/failure
+        */
+        @Override
+        public int deactivateSeInterface(){
+            synchronized (NfcService.this) {
+                return mSecureElement.deactivateSeInterface();
+            }
         }
 }
 
@@ -2772,6 +2847,11 @@ public class NfcService implements DeviceHostListener {
         int defaultFelicaCLTRoute = ((mDeviceHost.getDefaultFelicaCLTPowerState() & 0x3F) | (mDeviceHost.getDefaultFelicaCLTRoute() << ROUTE_LOC_MASK)) ;
         if (DBG) Log.d(TAG, "defaultFelicaCLTRoute : " + defaultFelicaCLTRoute);
         return defaultFelicaCLTRoute;
+    }
+
+    public int getGsmaPwrState()
+    {
+        return mDeviceHost.getGsmaPwrState();
     }
 
     public int getAidRoutingTableStatus() {

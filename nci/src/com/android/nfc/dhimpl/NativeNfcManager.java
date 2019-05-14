@@ -193,6 +193,9 @@ public class NativeNfcManager implements DeviceHost {
     public native int   getDefaultFelicaCLTPowerState();
 
     @Override
+    public native int getGsmaPwrState();
+
+    @Override
     public native boolean commitRouting();
 
     @Override
@@ -599,6 +602,10 @@ public class NativeNfcManager implements DeviceHost {
     public native boolean isNfccBusy();
     @Override
     public native int setTransitConfig(String configs);
+    @Override
+    public native void semsGetOutputData();
+    @Override
+    public native boolean semsGetExecutionStatus();
     @Override
     public native int getRemainingAidTableSize();
     @Override
