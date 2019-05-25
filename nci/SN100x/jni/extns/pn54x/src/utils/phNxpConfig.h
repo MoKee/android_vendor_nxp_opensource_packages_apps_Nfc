@@ -58,6 +58,7 @@ int isNxpConfigModified();
 #define default_storage_location "/data/nfc"
 #if(NXP_EXTNS == TRUE)
 #define NAME_NFA_CONFIG_FORMAT              "NFA_CONFIG_FORMAT"
+#define NAME_DEFUALT_GSMA_PWR_STATE "DEFUALT_GSMA_PWR_STATE"
 #endif
 
 /**

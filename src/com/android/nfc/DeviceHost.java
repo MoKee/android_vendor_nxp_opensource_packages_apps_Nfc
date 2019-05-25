@@ -253,6 +253,8 @@ public interface DeviceHost {
 
     public int getDefaultFelicaCLTPowerState();
 
+    public int getGsmaPwrState();
+
     public boolean commitRouting();
 
     public void setEmptyAidRoute(int defaultAidRoute);
@@ -351,6 +353,8 @@ public interface DeviceHost {
     public byte[] transceiveAppData(byte[] data);
     boolean isNfccBusy();
     int setTransitConfig(String configs);
+    public void semsGetOutputData();
+    public boolean semsGetExecutionStatus();
     public int getRemainingAidTableSize();
     public int doselectUicc(int uiccSlot);
     public int doGetSelectedUicc();
