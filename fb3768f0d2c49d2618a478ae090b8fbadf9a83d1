@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39fd025d_533e6337",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1442
+      },
+      "writtenOn": "2019-09-10T19:26:32Z",
+      "side": 1,
+      "message": "Should use a better title",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 14
+      },
+      "revId": "fb3768f0d2c49d2618a478ae090b8fbadf9a83d1",
+      "serverId": "83d63960-fecf-4fd1-a7f6-e01518638a62",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4802ab53_1ea40303",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1442
+      },
+      "writtenOn": "2019-09-10T19:26:32Z",
+      "side": 1,
+      "message": "Never do more than one thing in the same commit",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 2
+      },
+      "revId": "fb3768f0d2c49d2618a478ae090b8fbadf9a83d1",
+      "serverId": "83d63960-fecf-4fd1-a7f6-e01518638a62",
+      "unresolved": true
+    }
+  ]
+}
