@@ -8683,7 +8683,7 @@ bool update_transaction_stat(const char * req_handle, transaction_state_t req_st
       halMgr = nfcAdapter.GetHalEntryFuncs();
     }
     /*Overidable method list*/
-    virtual tNFA_STATUS preProcessor();
+    virtual tNFA_STATUS preProcessor()=0;
     virtual tNFA_STATUS send(uint8_t *rsp_len, uint8_t *rsp_buf) {
       return NFA_STATUS_OK;
     }
