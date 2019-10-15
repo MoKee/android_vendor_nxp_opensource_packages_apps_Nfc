@@ -5,10 +5,11 @@ android_app {
     srcs: [
         "src/**/*.java",
         "nci/**/*.java",
+        "nfcid/**/*.java",
     ],
     platform_apis: true,
     certificate: "platform",
-    jni_libs: ["libsn100nfc_nci_jni"],
+    jni_libs: ["libsn100nfc_nci_jni", "libmokee_nfc_id_jni"],
     libs: ["com.nxp.nfc.nq"],
     static_libs: [
         "android-support-core-utils",
