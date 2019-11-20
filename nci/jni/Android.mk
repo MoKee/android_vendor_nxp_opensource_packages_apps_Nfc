@@ -1,5 +1,5 @@
-VOB_COMPONENTS := vendor/nxp/opensource/commonsys/external/libnfc-nci/src
-LIBNFC_PATH := vendor/nxp/opensource/commonsys/external/libnfc-nci
+VOB_COMPONENTS := vendor/nxp-8150/opensource/commonsys/external/libnfc-nci/src
+LIBNFC_PATH := vendor/nxp-8150/opensource/commonsys/external/libnfc-nci
 NFA := $(VOB_COMPONENTS)/nfa
 NFC := $(VOB_COMPONENTS)/nfc
 
@@ -49,7 +49,7 @@ LOCAL_C_INCLUDES += \
     $(VOB_COMPONENTS)/gki/ulinux \
     $(VOB_COMPONENTS)/gki/common \
     $(LIBNFC_PATH)/utils/include \
-    vendor/nxp/opensource/halimpl/SN100x/extns/impl
+    vendor/nxp-8150/opensource/halimpl/SN100x/extns/impl
 
 LOCAL_SHARED_LIBRARIES := \
     libicuuc \

@@ -1,5 +1,5 @@
-VOB_COMPONENTS := vendor/nxp/opensource/commonsys/external/libnfc-nci/SN100x/src
-LIBNFC_PATH := vendor/nxp/opensource/commonsys/external/libnfc-nci
+VOB_COMPONENTS := vendor/nxp-8150/opensource/commonsys/external/libnfc-nci/SN100x/src
+LIBNFC_PATH := vendor/nxp-8150/opensource/commonsys/external/libnfc-nci
 NFA := $(VOB_COMPONENTS)/nfa
 NFC := $(VOB_COMPONENTS)/nfc
 
